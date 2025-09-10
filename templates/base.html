@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dear Loved One</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    .pill { border:1px solid #eee; padding:.25rem .6rem; border-radius:999px; font-size:.9rem; }
+    .sent { color: #16a34a; }
+    .scheduled { color:#f59e0b; }
+    .failed { color:#ef4444; }
+    .card { border:1px solid #eee; border-radius:12px; padding:1rem; }
+  </style>
+</head>
+<body>
+  <nav class="container-fluid">
+    <ul>
+      <li><strong>Dear Loved One</strong></li>
+    </ul>
+    <ul>
+      {% if current_user.is_authenticated %}
+        <li><span class="pill">Hi, {{ current_user.name }}</span></li>
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+      {% else %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('register') }}">Sign Up</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div>
+        {% for cat, msg in messages %}
+          <article class="card {{ cat }}">{{ msg }}</article>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Dashboard</h2>
+
+<h3>Schedule a new message</h3>
+<form method="post" action="{{ url_for('create_memory') }}">
+  <label>Title <input name="title" required placeholder="Letter for Mom"></label>
+  <label>Recipient Email <input name="recipient" type="email" required></label>
+  <label>Send at (local) <input name="send_at" type="datetime-local" required></label>
+  <label>Message
+    <textarea name="message" rows="6" required placeholder="Write your message..."></textarea>
+  </label>
+  <button type="submit">Save</button>
+</form>
+
+<hr>
+
+<h3>Your messages</h3>
+{% if not memories %}
+  <p>No messages yet.</p>
+{% else %}
+  <table>
+    <thead><tr><th>Title</th><th>Recipient</th><th>Send at</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+    {% for m in memories %}
+      <tr>
+        <td>{{ m.title }}</td>
+        <td>{{ m.recipient_email }}</td>
+        <td>{{ m.send_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td class="{{ m.status }}">{{ m.status }}</td>
+        <td>
+          {% if m.status == 'scheduled' %}
+          <form style="display:inline" method="post" action="{{ url_for('send_now', mid=m.id) }}">
+            <button>Send now</button>
+          </form>
+          {% endif %}
+          <form style="display:inline" method="post" action="{{ url_for('delete_memory', mid=m.id) }}">
+            <button class="secondary">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
