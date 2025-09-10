@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
+<figure class="hero">
+  <img src="{{ url_for('static', filename='hugs.png') }}" alt="Warm hug illustration">
+  <figcaption>Sending a warm hug.</figcaption>
+  </figure>
 <section style="text-align:center; padding:2rem 0;">
   <h1>Dear Loved One</h1>
   <p>Create and schedule heartfelt messages and acts of love.</p>
