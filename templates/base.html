@@ -1,55 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>Dear Loved One</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-  <style>
-    .pill { border:1px solid #eee; padding:.25rem .6rem; border-radius:999px; font-size:.9rem; }
-    .sent { color: #16a34a; }
-    .scheduled { color:#f59e0b; }
-    .failed { color:#ef4444; }
-    .card { border:1px solid #eee; border-radius:12px; padding:1rem; }
-    .hero { margin: 1rem 0 2.25rem; text-align:center; }
-    .hero img { width: 100%; height: auto; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.12); }
-    .hero figcaption { color:#6b7280; font-size:.9rem; margin-top:.5rem; }
-    .hero-bg { margin: 1rem 0 1.25rem; border-radius:16px; box-shadow: 0 8px 24px rgba(0,0,0,.12); background-position:center; background-size:cover; background-repeat:no-repeat; height:260px; background-color:#f8fafc; }
-    @media (min-width: 768px) { .hero-bg { height:360px; } }
-    .hero-caption { color:#6b7280; font-size:.9rem; text-align:center; margin:-.25rem 0 1.5rem; }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <nav class="container-fluid">
-    <ul>
-      <li><strong>Dear Loved One</strong></li>
-    </ul>
-    <ul>
-      {% if current_user.is_authenticated %}
-        <li><span class="pill">Hi, {{ current_user.name }}</span></li>
-        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-        <li><a href="{{ url_for('logout') }}">Logout</a></li>
-      {% else %}
-        <li><a href="{{ url_for('login') }}">Login</a></li>
-        <li><a href="{{ url_for('register') }}">Sign Up</a></li>
-      {% endif %}
-    </ul>
-  </nav>
 
-  <main class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div>
-        {% for cat, msg in messages %}
-          <article class="card {{ cat }}">{{ msg }}</article>
-        {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='images/envelope.png') }}" alt="Dear Loved One Logo">
+      <span>Dear Loved One</span>
+    </div>
+    <nav>
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}" class="btn">Sign Up</a>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main>
     {% block content %}{% endblock %}
   </main>
 
-  <script src="{{ url_for('static', filename='main.js') }}"></script>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>&copy; {{ 2025 }} Dear Loved One · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+    <p class="tagline">Keep love alive, always.</p>
+  </footer>
+
 </body>
 </html>

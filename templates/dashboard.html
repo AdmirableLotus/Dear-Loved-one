@@ -1,45 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Dashboard</h2>
 
-<h3>Schedule a new message</h3>
-<form method="post" action="{{ url_for('create_memory') }}">
-  <label>Title <input name="title" required placeholder="Letter for Mom"></label>
-  <label>Recipient Email <input name="recipient" type="email" required></label>
-  <label>Send at (local) <input name="send_at" type="datetime-local" required></label>
-  <label>Message
-    <textarea name="message" rows="6" required placeholder="Write your message..."></textarea>
-  </label>
-  <button type="submit">Save</button>
-</form>
+<section class="dashboard">
+  <h2>Welcome back, {{ user.name }}!</h2>
+  <p class="subtitle">Here’s your space to manage messages, services, and more.</p>
 
-<hr>
+  <div class="dashboard-grid">
+    <article class="dash-card">
+      <img src="{{ url_for('static', filename='images/calendar-envelope.png') }}" alt="Scheduled Messages">
+      <h3>Scheduled Messages</h3>
+      <p>View and manage your upcoming letters.</p>
+      <a href="#">View Messages</a>
+    </article>
 
-<h3>Your messages</h3>
-{% if not memories %}
-  <p>No messages yet.</p>
-{% else %}
-  <table>
-    <thead><tr><th>Title</th><th>Recipient</th><th>Send at</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody>
-    {% for m in memories %}
-      <tr>
-        <td>{{ m.title }}</td>
-        <td>{{ m.recipient_email }}</td>
-        <td>{{ m.send_at.strftime('%Y-%m-%d %H:%M') }}</td>
-        <td class="{{ m.status }}">{{ m.status }}</td>
-        <td>
-          {% if m.status == 'scheduled' %}
-          <form style="display:inline" method="post" action="{{ url_for('send_now', mid=m.id) }}">
-            <button>Send now</button>
-          </form>
-          {% endif %}
-          <form style="display:inline" method="post" action="{{ url_for('delete_memory', mid=m.id) }}">
-            <button class="secondary">Delete</button>
-          </form>
-        </td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-{% endif %}
+    <article class="dash-card">
+      <img src="{{ url_for('static', filename='images/gift.png') }}" alt="Services">
+      <h3>Arrange Services</h3>
+      <p>Send flowers, gifts, and donations to loved ones.</p>
+      <a href="#">Arrange Now</a>
+    </article>
+
+    <article class="dash-card">
+      <img src="{{ url_for('static', filename='images/heartlock.png') }}" alt="Account">
+      <h3>Account Settings</h3>
+      <p>Update your preferences and privacy settings.</p>
+      <a href="#">Manage Account</a>
+    </article>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,22 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="hero-bg" role="img" aria-label="Warm hug illustration" style="background-image:url('{{ url_for('static', filename='hugs.png') }}')"></div>
-<p class="hero-caption">Sending a warm hug.</p>
-<section style="text-align:center; padding:2rem 0;">
-  <h1>Dear Loved One</h1>
-  <p>Create and schedule heartfelt messages and acts of love.</p>
-  <a role="button" href="{{ url_for('register') }}">Create Your Account</a>
-</section>
+
+<div class="hero">
+  <img class="hero-img" src="{{ url_for('static', filename='images/herocouple.png') }}" alt="Couple Hugging">
+  <div class="hero-text">
+    <h1>Dear Loved One</h1>
+    <p>Create and schedule heartfelt messages and acts of love.</p>
+    <a role="button" href="{{ url_for('register') }}">Get Started</a>
+  </div>
+</div>
 
 <div class="grid">
-  <article class="card"><h3>Schedule Messages</h3>
+  <article class="card">
+    <img src="{{ url_for('static', filename='images/calendar-envelope.png') }}" alt="Schedule Messages">
+    <h3>Schedule Messages</h3>
     <p>Write letters that arrive on birthdays, milestones, and more.</p>
   </article>
-  <article class="card"><h3>Arrange Services</h3>
+
+  <article class="card">
+    <img src="{{ url_for('static', filename='images/bouquet.png') }}" alt="Arrange Services">
+    <h3>Arrange Services</h3>
     <p>Extend later with flowers, donations, and gifts.</p>
   </article>
-  <article class="card"><h3>Private & Secure</h3>
+
+  <article class="card">
+    <img src="{{ url_for('static', filename='images/heartlock.png') }}" alt="Private & Secure">
+    <h3>Private & Secure</h3>
     <p>Your account controls what gets sent and when.</p>
   </article>
 </div>
+
 {% endblock %}
