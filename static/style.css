@@ -196,3 +196,87 @@ nav a.btn {
   background: #e15d5d;
 }
 
+/* --- Messages Page --- */
+.messages {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.messages h2 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.messages .subtitle {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.actions {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.btn-primary {
+  background: #f97373;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: #e15d5d;
+}
+
+/* Table styling */
+.messages-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.messages-table th,
+.messages-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.messages-table th {
+  background: #fafafa;
+  font-weight: 600;
+}
+
+.messages-table tr:hover {
+  background: #fdf2f2;
+}
+
+.status {
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.status.sent {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.status.pending {
+  background: #fefcbf;
+  color: #744210;
+}
+
+.empty {
+  text-align: center;
+  color: #777;
+  padding: 2rem;
+}
+

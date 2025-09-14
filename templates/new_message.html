@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="auth-form">
+  <h2>New Message</h2>
+  <form method="POST">
+    <label for="recipient">Recipient</label>
+    <input type="text" id="recipient" name="recipient" required>
+
+    <label for="delivery_date">Delivery Date</label>
+    <input type="date" id="delivery_date" name="delivery_date" required>
+
+    <label for="content">Message Content</label>
+    <textarea id="content" name="content" rows="5" required></textarea>
+
+    <button type="submit">Save Message</button>
+  </form>
+  <p style="margin-top:1rem"><a href="{{ url_for('messages') }}">Back to Messages</a></p>
+  
+</section>
+
+{% endblock %}
+

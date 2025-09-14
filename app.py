@@ -11,6 +11,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 from email_validator import validate_email, EmailNotValidError
 
+from flask import Flask, render_template, request, redirect, url_for, flash
+from models import db, Message
+from datetime import datetime
+
 # --------------------------------------------------------------------
 # Config
 # --------------------------------------------------------------------
@@ -23,6 +27,17 @@ engine = create_engine(DATABASE_URL, echo=False, future=True)
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret")
+"""
+Flask-SQLAlchemy configuration for Message model (models.py).
+Uses the same SQLite file as the existing SQLAlchemy engine.
+"""
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///dlo.db")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db.init_app(app)
+
+with app.app_context():
+    # Ensures the messages table exists alongside the existing models
+    db.create_all()
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
@@ -241,5 +256,72 @@ def delete_memory(mid):
     flash("Deleted.", "ok")
     return redirect(url_for("dashboard"))
 
+# --------------------------------------------------------------------
+# Message routes (Flask-SQLAlchemy)
+# --------------------------------------------------------------------
+@app.route("/messages")
+@login_required
+def messages():
+    all_messages = Message.query.filter_by(user_id=current_user.id).order_by(Message.delivery_date.desc()).all()
+    return render_template("messages.html", messages=all_messages)
+
+
+@app.route("/messages/new", methods=["GET", "POST"])
+@login_required
+def new_message():
+    if request.method == "POST":
+        recipient = request.form["recipient"]
+        content = request.form["content"]
+        delivery_date = datetime.strptime(request.form["delivery_date"], "%Y-%m-%d")
+        new_msg = Message(
+            recipient=recipient,
+            content=content,
+            delivery_date=delivery_date,
+            user_id=current_user.id,
+        )
+        db.session.add(new_msg)
+        db.session.commit()
+        flash("Message created successfully!", "success")
+        return redirect(url_for("messages"))
+    return render_template("new_message.html")
+
+
+@app.route("/messages/<int:id>")
+@login_required
+def view_message(id):
+    message = Message.query.get_or_404(id)
+    if message.user_id != current_user.id:
+        return ("Not found", 404)
+    return render_template("view_message.html", message=message)
+
+
+@app.route("/messages/<int:id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_message(id):
+    message = Message.query.get_or_404(id)
+    if message.user_id != current_user.id:
+        return ("Not found", 404)
+    if request.method == "POST":
+        message.recipient = request.form["recipient"]
+        message.content = request.form["content"]
+        message.delivery_date = datetime.strptime(request.form["delivery_date"], "%Y-%m-%d")
+        db.session.commit()
+        flash("Message updated successfully!", "info")
+        return redirect(url_for("messages"))
+    return render_template("edit_message.html", message=message)
+
+
+@app.route("/messages/<int:id>/delete")
+@login_required
+def delete_message(id):
+    message = Message.query.get_or_404(id)
+    if message.user_id != current_user.id:
+        return ("Not found", 404)
+    db.session.delete(message)
+    db.session.commit()
+    flash("Message deleted successfully!", "danger")
+    return redirect(url_for("messages"))
+
 if __name__ == "__main__":
     app.run(debug=True)
+
